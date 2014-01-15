@@ -48,6 +48,10 @@ static inline uint32_t readl(void *addr)
 	return *((volatile uint32_t *) addr);
 }
 
+extern void *regs;
+#define S(val, off)	writel(val, regs + (off))
+#define L(off)		readl(regs + (off))
+
 #define VE_CTRL				0x000
 #define VE_VERSION			0x0f0
 

@@ -68,7 +68,7 @@ struct cedarv_cache_range
 };
 
 static int fd = -1;
-static void *regs = NULL;
+void *regs = NULL;
 static int version = 0;
 
 struct memchunk_t
