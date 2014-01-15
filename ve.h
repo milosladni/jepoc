@@ -108,10 +108,11 @@ extern void *regs;
 #define VE_SRAM_H264_REF_LIST1		0x664
 #define VE_SRAM_H264_SCALING_LISTS	0x800
 
-#define VE_ISP_INPUT_SIZE		0xa00
-#define VE_ISP_INPUT_STRIDE		0xa04
-#define VE_ISP_INPUT_LUMA		0xa78
-#define VE_ISP_INPUT_CHROMA		0xa7c
+#define VE_ISP_PIC_SIZE			0xa00
+#define VE_ISP_PIC_STRIDE		0xa04
+#define VE_ISP_CTRL			0xa08
+#define VE_ISP_PIC_LUMA			0xa78
+#define VE_ISP_PIC_CHROMA		0xa7c
 
 #define VE_AVC_PARAM			0xb04
 #define VE_AVC_QP			0xb08
@@ -131,5 +132,7 @@ extern void *regs;
 #define VE_AVC_REF_SLUMA		0xbb8
 #define VE_AVC_REC_SLUMA		0xbbc
 #define VE_AVC_MB_INFO			0xbc0
+#define VE_AVC_SDRAM_INDEX		0xbe0
+#define VE_AVC_SDRAM_DATA		0xbe4
 
 #endif
