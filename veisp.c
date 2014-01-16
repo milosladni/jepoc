@@ -24,8 +24,8 @@
 
 void veisp_set_buffers(uint8_t *Y, uint8_t *C)
 {
-	uint32_t pY = ve_virt2phys(Y) + 0x40000000;
-	uint32_t pC = ve_virt2phys(C) + 0x40000000;
+	uint32_t pY = ve_virt2phys(Y);
+	uint32_t pC = ve_virt2phys(C);
 	S(pY, VE_ISP_PIC_LUMA);
 	S(pC, VE_ISP_PIC_CHROMA);
 }
