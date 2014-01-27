@@ -106,9 +106,9 @@ void vejpeg_write_SOS(void)
 		veavc_put_bits(4, c->ac_tbl_no);
 	}
 	
-	/* is unkown if correct */
+	/* again not initialized, and are zero */
 	veavc_put_bits(8, jcs.Ss);
-	veavc_put_bits(8, jcs.Se);
+	veavc_put_bits(8, jcs.lim_Se);
 	veavc_put_bits(4, jcs.Al);
 	veavc_put_bits(4, jcs.Ah);
 }
