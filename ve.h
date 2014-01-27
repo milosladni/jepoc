@@ -124,6 +124,7 @@ extern void *regs;
 #define VE_AVC_VLE_ADDR			0xb80
 #define VE_AVC_VLE_END			0xb84
 #define VE_AVC_VLE_OFFSET		0xb88
+#define VE_AVC_VLE_MAX			0xb8c
 #define VE_AVC_VLE_LENGTH		0xb90
 #define VE_AVC_REF_LUMA			0xba0
 #define VE_AVC_REF_CHROMA		0xba4

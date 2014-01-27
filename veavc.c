@@ -35,10 +35,13 @@ void veavc_init_vle(uint8_t *J, uint32_t size)
 {
 	uint32_t pJ = ve_virt2phys(J);
 	uint32_t end = pJ + size - 1;
+	uint32_t maxbits = (size * 8 + 0xffff) & ~0xffff;
+	uint32_t max = maxbits > 0x0fff0000 ? 0x0fff0000 : maxbits;
 	S(pJ	    , VE_AVC_VLE_ADDR);
 	S(end	    , VE_AVC_VLE_END);
 	S(0	    , VE_AVC_VLE_OFFSET);
-	S(0x04000000, 0xb8c);
+	S(max	    , VE_AVC_VLE_MAX);
+	printf("[VEAVC] outbuf of size %d, write only max %d bytes\n", size, max / 8);
 }
 
 void veavc_init_ctrl(veavc_encoder_mode mode)
