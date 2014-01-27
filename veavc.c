@@ -91,17 +91,19 @@ void veavc_jpeg_quantization(uint16_t *tableY, uint16_t *tableC, uint32_t length
 	veavc_sdram_index(0x0);
 
 /*
-	This needs to be calibrated, the high bits of SDRAM_DATA have a small
-	effect in the dct coefficients, but the reason why is not know.
+	When compared to libjpeg, there are still rounding errors in the
+	coefficients values (around 1 unit of difference).
 */
 	for(i = 0; i < length; i++)
 	{
-		data = 0xffff / tableY[i];
+		data  = 0x0000ffff & (0xffff / tableY[i]);
+		data |= 0x00ff0000 & (((tableY[i] + 1) / 2) << 16);
 		S(data, VE_AVC_SDRAM_DATA);
 	}
 	for(i = 0; i < length; i++)
 	{
-		data = 0xffff / tableC[i];
+		data  = 0x0000ffff & (0xffff / tableC[i]);
+		data |= 0x00ff0000 & (((tableC[i] + 1) / 2) << 16);
 		S(data, VE_AVC_SDRAM_DATA);
 	}
 }
