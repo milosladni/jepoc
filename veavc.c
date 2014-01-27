@@ -52,9 +52,10 @@ void veavc_init_ctrl(veavc_encoder_mode mode)
 
 	S(0x0000000f  , VE_AVC_CTRL);
 	S(trigger     , VE_AVC_TRIGGER);
-	
+
+	/* clear status bits */
 	status = L(VE_AVC_STATUS);
-	S(status | 0x7, VE_AVC_STATUS);
+	S(status | 0xf, VE_AVC_STATUS);
 }
 
 void veavc_jpeg_parameters(uint8_t fill1, uint8_t stuff, uint32_t biasY, uint32_t biasC)
@@ -69,16 +70,27 @@ void veavc_jpeg_parameters(uint8_t fill1, uint8_t stuff, uint32_t biasY, uint32_
 	S(value, VE_AVC_PARAM);
 }
 
+static const char* status_to_print(uint32_t status)
+{
+	uint32_t value = status & 0xf;
+	if(value == 0) return "none";
+	if(value == 1) return "success";
+	if(value == 2) return "failed";
+	return "unknown";
+}
+
 void veavc_put_bits(uint8_t nbits, uint32_t data)
 {
 	uint32_t trigger = (encoder_mode & 1) << 16;
+	uint32_t status;
 	trigger |= (nbits & 0x3f) << 8;
 	trigger |= 1;
 	S(data   , VE_AVC_BASIC_BITS);
 	S(trigger, VE_AVC_TRIGGER);
 
-	/* status register is unknown */
-	L(VE_AVC_STATUS);
+	status = L(VE_AVC_STATUS) & 0xf;
+	if(status)
+		printf("[VEAVC] put bits status %d (%s)\n", status, status_to_print(status));
 }
 
 void veavc_sdram_index(uint32_t index)
@@ -120,7 +132,9 @@ void veavc_launch_encoding(void)
 
 void veavc_check_status(void)
 {
-	L(VE_AVC_STATUS);
+	uint32_t status = L(VE_AVC_STATUS) & 0xf;
+	if(status)
+		printf("[VEAVC] finish status %d (%s)\n", status, status_to_print(status));
 }
 
 uint32_t veavc_get_written(void)
