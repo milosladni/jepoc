@@ -34,7 +34,12 @@ enum IOCTL_CMD
 {
 	IOCTL_UNKOWN = 0x100,
 	IOCTL_GET_ENV_INFO,
-	IOCTL_WAIT_VE,
+#ifdef MAINLINE
+	IOCTL_WAIT_VE_DE,
+	IOCTL_WAIT_VE_EN,
+#else
+    IOCTL_WAIT_VE,
+#endif
 	IOCTL_RESET_VE,
 	IOCTL_ENABLE_VE,
 	IOCTL_DISABLE_VE,
@@ -51,7 +56,18 @@ enum IOCTL_CMD
 	IOCTL_ENGINE_CHECK_DELAY,
 	IOCTL_GET_IC_VER,
 	IOCTL_ADJUST_AVS2_ABS,
-	IOCTL_FLUSH_CACHE
+	IOCTL_FLUSH_CACHE,
+	IOCTL_SET_REFCOUNT,
+	IOCTL_FLUSH_CACHE_ALL,
+	IOCTL_TEST_VERSION,
+
+	IOCTL_READ_REG = 0x300,
+	IOCTL_WRITE_REG,
+	IOCTL_SET_VOL = 0x400,
+
+	IOCTL_WAIT_JPEG_DEC = 0x500,
+	/*for get the ve ref_count for ipc to delete the semphore*/
+	IOCTL_GET_REFCOUNT,
 };
 
 struct ve_info
@@ -161,8 +177,11 @@ int ve_wait(int timeout)
 {
 	if (fd == -1)
 		return 0;
-
+#ifdef MAINLINE
+	return ioctl(fd, IOCTL_WAIT_VE_EN, timeout);
+#else
 	return ioctl(fd, IOCTL_WAIT_VE, timeout);
+#endif
 }
 
 void *ve_malloc(int size)
